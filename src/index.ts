@@ -3,7 +3,7 @@ import * as Discord from "discord.js";
 import * as fs from "fs";
 import * as xml2js from "xml2js";
 import fetch from "node-fetch";
-import { RedditFeed, Entry } from "./templates/RedditFeed";
+import { RedditFeed, Entry, ParsedEntry } from "./templates/RedditFeed";
 
 /**
  * Initial setup
@@ -29,7 +29,7 @@ client.on("ready", () => {
     ) as Discord.TextChannel;
   // setInterval(() => {
   fetchReddit()
-    .then((freebies) => {
+    .then((freebies: ParsedEntry[]) => {
       freebies.forEach((freeb: ParsedEntry) => {
         const formatted = format(freeb);
         channel.send(formatted);
@@ -45,16 +45,15 @@ client.login(process.env.DISCORD_TOKEN).then(() => {
 
 /**
  * Helper function to format message before sending
- * @param str
  */
-function format(str: ParsedEntry) {
+function format(str: ParsedEntry): string {
   return `${str.title} : ${str.link}`;
 }
 
 /**
  * Actual fetch of the RSS feed
  */
-function fetchReddit() {
+function fetchReddit(): Promise<Response | ParsedEntry[]> {
   return fetch(process.env.REDDIT_FEED)
     .then((result) => result.text())
     .then(xml2js.parseStringPromise)
@@ -64,9 +63,4 @@ function fetchReddit() {
         .map((el: Entry): ParsedEntry => ({ title: el.title[0], link: el.link[0]["$"].href }))
         .filter((el: ParsedEntry) => customRegex.test(el.title.toLowerCase()));
     });
-}
-
-interface ParsedEntry {
-  title: string;
-  link: string;
 }

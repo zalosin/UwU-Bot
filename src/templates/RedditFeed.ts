@@ -81,3 +81,8 @@ export interface Fluffy {
   href: string;
   type: string;
 }
+
+export interface ParsedEntry {
+  title: string;
+  link: string;
+}
