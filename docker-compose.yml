@@ -1,0 +1,19 @@
+version: '3'
+services:
+  api:
+    image: uwubot
+    build: .
+    networks:
+      - backend
+    ports:
+      - "6868:6868"
+
+  web-cli:
+    image: uwubot
+    networks:
+      - backend
+    command: sh
+
+networks:
+  backend:
+    driver: bridge
