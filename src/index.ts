@@ -13,7 +13,7 @@ const client = new Discord.Client();
 const serverName: string = process.env.SERVER_NAME;
 const channelName: string = process.env.CHANNEL_NAME;
 const cacheFileName: string = process.env.CACHE_FILE_NAME;
-const REFRESH_TIME: number = 15 * 30 * 1000;
+const REFRESH_TIME: number = 15 * 60 * 1000;
 
 /**
  * Regex used to test entry title
